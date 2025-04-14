@@ -1,0 +1,165 @@
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700&display=swap');
+
+* {
+  font-family: 'Urbanist', sans-serif;
+}
+
+/* Navbar Container */
+.navbar {
+  background-color: #0d1117; /* Sleek dark gray */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  height: 65px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Logo */
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #f4b400;
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
+}
+
+.logo:hover {
+  color: #ffd666;
+}
+
+/* Navigation Links */
+.nav-links {
+  display: flex;
+  gap: 28px;
+}
+
+.nav-link {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 8px 14px;
+  border-radius: 5px;
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #f4b400;
+}
+
+/* Buttons Section */
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Login & Signup Buttons */
+.login-button,
+.signup-button {
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.login-button {
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+}
+
+.login-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.signup-button {
+  background-color: #f4b400;
+  border: none;
+  color: #0d1117;
+}
+
+.signup-button:hover {
+  background-color: #e2a100;
+}
+
+/* Profile Section */
+.profile-menu {
+  position: relative;
+}
+
+.profile-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid white;
+  object-fit: cover;
+}
+
+/* Dropdown Menu */
+.dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: #ffffff;
+  color: #1a1f36;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  overflow: hidden;
+  z-index: 999;
+}
+
+.dropdown button {
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 15px;
+  transition: background 0.3s ease-in-out;
+}
+
+.dropdown button:hover {
+  background-color: #f5f5f5;
+}
+
+/* Prevent content from hiding under navbar */
+body {
+  padding-top: 70px;
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+
+  .nav-buttons {
+    gap: 10px;
+  }
+
+  .navbar {
+    padding: 10px 16px;
+  }
+
+  .profile-icon {
+    width: 36px;
+    height: 36px;
+  }
+}
