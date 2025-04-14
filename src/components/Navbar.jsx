@@ -31,7 +31,14 @@ const Navbar = ({ toggleSidebar }) => {
 
   return (
     <nav className="navbar">
-      <h1 className="logo" onClick={() => navigate("/")}>Vehicle Vault</h1>
+      <div className="logo-container" onClick={() => navigate("/")}>
+        <img
+          src="/logo.jpeg"  // Path to the logo inside the public folder
+          alt="Logo"
+          className="logo-image"
+        />
+        <h1 className="logo"></h1>
+      </div>
 
       <div className="nav-links">
         <button className="nav-link" onClick={() => navigate("/")}>Home</button>

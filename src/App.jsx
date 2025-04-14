@@ -94,36 +94,37 @@ const App = () => {
             }
           />
 
-          {/* Homepage */}
+          {/* Homepage with car background */}
           <Route
             path="/"
             element={
-              <div className="main-content flex flex-col items-center justify-center text-center p-6">
-                <div className="search-section w-full max-w-4xl bg-white p-8 rounded-lg shadow-xl">
+              <div
+                className="main-content flex flex-col items-center justify-center text-center px-6"
+                style={{
+                  backgroundImage: `url('/background.jpg')`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  minHeight: "100vh",
+                  paddingTop: "100px",
+                }}
+              >
+                <div className="bg-white bg-opacity-80 p-8 rounded-lg shadow-xl max-w-4xl w-full">
                   <h1 className="text-5xl font-bold text-gray-800 mb-6">
                     Find Your Dream Car Today
                   </h1>
 
-                  <div className="search-bar-container flex justify-center gap-4">
+                  <div className="flex justify-center gap-4">
                     <input
                       type="text"
                       placeholder="Search Make or Model"
-                      className="search-input w-full max-w-md p-4 border rounded-lg shadow-sm focus:ring focus:ring-indigo-400 text-lg"
+                      className="w-full max-w-md p-4 border rounded-lg shadow-sm focus:ring focus:ring-indigo-400 text-lg"
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                     />
-                    <button className="search-button px-5 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 text-lg">
+                    <button className="px-5 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 text-lg">
                       Search
                     </button>
                   </div>
-                </div>
-
-                <div className="image-section mt-8">
-                  <img
-                    src="https://images.unsplash.com/photo-1583267745194-542d02f71c5c"
-                    alt="Car Background"
-                    className="search-image w-full max-w-5xl rounded-lg shadow-2xl border-4 border-gray-200"
-                  />
                 </div>
               </div>
             }

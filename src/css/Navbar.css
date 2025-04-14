@@ -21,13 +21,29 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Logo */
+/* Logo Container */
+.logo-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* Logo Image */
+.logo-image {
+  width: 60px;       /* Increased size */
+  height: 60px;
+  margin-right: 12px;
+  object-fit: contain;
+}
+
+/* Logo Text */
 .logo {
   font-size: 24px;
   font-weight: 700;
   color: #f4b400;
   text-decoration: none;
   transition: color 0.3s ease-in-out;
+  line-height: 1;
 }
 
 .logo:hover {
