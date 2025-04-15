@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
-import "../css/Cars.css"; // Make sure you have this or use Properties.css
+import "../css/Cars.css";
 
 const Cars = ({ cars = [], search, setSearch }) => {
   useEffect(() => {
@@ -9,11 +9,21 @@ const Cars = ({ cars = [], search, setSearch }) => {
     console.log("Search Term:", search);
   }, [cars, search]);
 
-  const filteredCars = cars.filter(
-    (car) =>
-      car.name?.toLowerCase().includes(search.toLowerCase()) ||
-      car.brand?.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredCars = useMemo(() => {
+    return cars.filter(
+      (car) =>
+        car.name?.toLowerCase().includes(search.toLowerCase()) ||
+        car.brand?.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [cars, search]);
+
+  // Predefined images from public folder
+  const carImages = ["/img1.png", "/img2.jpeg", "/img3.jpg"];
+
+  // Fallback image handler
+  const handleImageError = (e) => {
+    e.target.src = "/car-default.png";
+  };
 
   return (
     <div className="cars-container">
@@ -35,19 +45,26 @@ const Cars = ({ cars = [], search, setSearch }) => {
 
       <div className="car-grid">
         {filteredCars.length > 0 ? (
-          filteredCars.map((car) => {
+          filteredCars.map((car, index) => {
             const carId = car.carId || car._id;
             if (!carId) {
               console.warn("Car missing ID:", car);
               return null;
             }
 
+            // Static assignment to image (avoid flickering)
+            const imageIndex = index % carImages.length;
+            const assignedImage = carImages[imageIndex];
+
             return (
               <div key={carId} className="car-card">
                 <img
-                  src={car.image || "/car-default.png"} // Use default image fallback
+                  src={assignedImage}
                   alt={car.name || "Car Image"}
                   className="car-image"
+                  loading="lazy"
+                  onError={handleImageError}
+                  style={{ objectFit: "cover", width: "100%", height: "200px" }}
                 />
 
                 <div className="car-info">

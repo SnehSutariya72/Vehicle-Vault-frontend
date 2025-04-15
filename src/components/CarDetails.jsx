@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../css/CarDetails.css"; // Style file for car details
+import "../css/CarDetails.css";
 
 const CarDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [car, setCar] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [imageSrc, setImageSrc] = useState("/images/car-default.png");
+  const [imageSrc, setImageSrc] = useState("/car-default.png");
 
   useEffect(() => {
     if (!id) {
@@ -16,15 +16,19 @@ const CarDetails = () => {
       return;
     }
 
-    axios.get(`http://localhost:8000/api/cars/get_car/${id}`)
+    axios
+      .get(`http://localhost:8000/api/cars/get_car/${id}`)
       .then((response) => {
         const carData = response.data;
 
-        const index = Math.floor(Math.random() * 4) + 1;
-        const imagePath = `/images/car${index}.png`;
+        // Stable image selection (based on ID or fallback)
+        const carIndex = Math.abs((carData._id || carData.carId || "").toString().split("").reduce((acc, ch) => acc + ch.charCodeAt(0), 0)) % 3;
+        const fallbackImage = `/img${carIndex + 1}.jpg`; // assuming images are img1.jpg, img2.jpeg, etc.
 
-        setCar({ ...carData, image: carData.image || imagePath });
-        setImageSrc(carData.image || imagePath);
+        const image = carData.image || fallbackImage;
+
+        setCar(carData);
+        setImageSrc(image);
         setLoading(false);
       })
       .catch((error) => {
@@ -33,24 +37,26 @@ const CarDetails = () => {
       });
   }, [id]);
 
-  if (loading) return <p>Loading car details...</p>;
-  if (!car) return <p>Car not found.</p>;
+  if (loading) return <p className="text-center mt-10">Loading car details...</p>;
+  if (!car) return <p className="text-center mt-10">Car not found.</p>;
 
   return (
     <div className="car-details-container">
       <div className="car-details">
         <img
           src={imageSrc}
-          alt={car.make + " " + car.model}
+          alt={`${car.make || "Car"} ${car.model || ""}`}
           className="car-image"
-          onError={() => setImageSrc("/images/car-default.png")}
+          loading="lazy"
+          onError={() => setImageSrc("/car-default.png")}
+          style={{ objectFit: "cover", width: "100%", height: "300px" }}
         />
 
         <h2>{car.make} {car.model}</h2>
-        <p><strong>Price:</strong> ${car.price.toLocaleString()}</p>
-        <p><strong>Color:</strong> {car.color}</p>
-        <p><strong>Kilometers Driven:</strong> {car.kmsDriven} km</p>
-        <p><strong>City:</strong> {car.cityId}</p>
+        <p><strong>Price:</strong> ${car.price?.toLocaleString() || "N/A"}</p>
+        <p><strong>Color:</strong> {car.color || "N/A"}</p>
+        <p><strong>Kilometers Driven:</strong> {car.kmsDriven || "N/A"} km</p>
+        <p><strong>City:</strong> {car.cityId || "Unknown"}</p>
 
         <button className="call-now-btn" onClick={() => navigate("/dealers")}>
           📞 Contact Dealer
