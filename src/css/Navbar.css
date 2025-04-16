@@ -30,7 +30,7 @@
 
 /* Logo Image */
 .logo-image {
-  width: 60px;       /* Increased size */
+  width: 60px;
   height: 60px;
   margin-right: 12px;
   object-fit: contain;
@@ -71,6 +71,27 @@
 .nav-link:hover {
   background-color: rgba(255, 255, 255, 0.1);
   color: #f4b400;
+}
+
+/* Admin Link */
+.admin-link {
+  background-color: #e74c3c;
+  color: white !important;
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.admin-link:hover {
+  background-color: #c0392b;
+  color: white !important;
+}
+
+/* Admin dropdown button styling */
+.admin-dropdown-button {
+  color: #e74c3c !important;
+  font-weight: bold;
 }
 
 /* Buttons Section */
@@ -177,5 +198,10 @@ body {
   .profile-icon {
     width: 36px;
     height: 36px;
+  }
+  
+  /* Add a media query for the admin panel to be visible on mobile */
+  .dropdown {
+    width: 160px; /* Ensure enough width for the dropdown on mobile */
   }
 }

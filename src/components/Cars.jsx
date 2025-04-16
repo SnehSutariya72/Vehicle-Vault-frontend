@@ -1,8 +1,11 @@
-import React, { useEffect, useMemo } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "../css/Cars.css";
 
 const Cars = ({ cars = [], search, setSearch }) => {
+  const [searchError, setSearchError] = useState("");
+  const navigate = useNavigate();
+
   useEffect(() => {
     console.log("Cars component mounted!");
     console.log("Received cars:", cars);
@@ -12,8 +15,10 @@ const Cars = ({ cars = [], search, setSearch }) => {
   const filteredCars = useMemo(() => {
     return cars.filter(
       (car) =>
-        car.name?.toLowerCase().includes(search.toLowerCase()) ||
-        car.brand?.toLowerCase().includes(search.toLowerCase())
+        (car.name?.toLowerCase().includes(search.toLowerCase())) ||
+        (car.brand?.toLowerCase().includes(search.toLowerCase())) ||
+        (car.make?.toLowerCase().includes(search.toLowerCase())) ||
+        (car.model?.toLowerCase().includes(search.toLowerCase()))
     );
   }, [cars, search]);
 
@@ -25,6 +30,32 @@ const Cars = ({ cars = [], search, setSearch }) => {
     e.target.src = "/car-default.png";
   };
 
+  // Handle search submission
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (!search.trim()) return;
+
+    // Check if any car matches the search criteria
+    const foundCar = cars.find(
+      car => 
+        (car.name && car.name.toLowerCase().includes(search.toLowerCase())) || 
+        (car.brand && car.brand.toLowerCase().includes(search.toLowerCase())) ||
+        (car.make && car.make.toLowerCase().includes(search.toLowerCase())) ||
+        (car.model && car.model.toLowerCase().includes(search.toLowerCase()))
+    );
+
+    if (foundCar) {
+      // Car found - programmatically navigate to car details page
+      const carId = foundCar._id || foundCar.carId;
+      navigate(`/car/${carId}`);
+    } else {
+      // No car found - set error message
+      setSearchError("No matching cars found. Please try a different search term.");
+      // Clear error after 3 seconds
+      setTimeout(() => setSearchError(""), 3000);
+    }
+  };
+
   return (
     <div className="cars-container">
       <h1 className="text-3xl font-bold text-center mb-6">
@@ -33,14 +64,22 @@ const Cars = ({ cars = [], search, setSearch }) => {
 
       {/* Search Bar */}
       <div className="search-bar-container">
-        <input
-          type="text"
-          placeholder="Search by Brand or Name"
-          className="search-input"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <button className="search-button">Search</button>
+        <form onSubmit={handleSearchSubmit} className="search-form">
+          <input
+            type="text"
+            placeholder="Search by Brand or Name"
+            className="search-input"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <button type="submit" className="search-button">Search</button>
+        </form>
+        
+        {searchError && (
+          <div className="search-error">
+            {searchError}
+          </div>
+        )}
       </div>
 
       <div className="car-grid">
@@ -60,7 +99,7 @@ const Cars = ({ cars = [], search, setSearch }) => {
               <div key={carId} className="car-card">
                 <img
                   src={assignedImage}
-                  alt={car.name || "Car Image"}
+                  alt={car.name || car.make || "Car Image"}
                   className="car-image"
                   loading="lazy"
                   onError={handleImageError}
@@ -68,8 +107,8 @@ const Cars = ({ cars = [], search, setSearch }) => {
                 />
 
                 <div className="car-info">
-                  <h2 className="car-title">{car.name || "No Name"}</h2>
-                  <p className="car-brand">🚗 {car.brand || "Unknown Brand"}</p>
+                  <h2 className="car-title">{car.name || car.make + " " + car.model || "No Name"}</h2>
+                  <p className="car-brand">🚗 {car.brand || car.make || "Unknown Brand"}</p>
                   <p className="car-price">💰 ${car.price || "N/A"}</p>
                   <Link to={`/car/${carId}`} className="view-button">
                     View Details

@@ -25,6 +25,7 @@ const Navbar = ({ toggleSidebar }) => {
 
   const handleSignOut = () => {
     localStorage.removeItem("authToken"); // Remove authentication token
+    localStorage.removeItem("userData"); // Remove user data
     setIsAuthenticated(false);
     navigate("/login"); // Redirect to login page
   };
@@ -45,6 +46,11 @@ const Navbar = ({ toggleSidebar }) => {
         <button className="nav-link" onClick={() => navigate("/Cars")}>Cars</button>
         <button className="nav-link" onClick={() => navigate("/agents")}>Agents</button>
         <button className="nav-link" onClick={() => navigate("/dashboard")}>Dashboard</button>
+        {isAuthenticated && (
+          <button className="nav-link admin-link" onClick={() => navigate("/admin")}>
+            Admin Panel
+          </button>
+        )}
       </div>
 
       <div className="nav-buttons">
@@ -59,6 +65,7 @@ const Navbar = ({ toggleSidebar }) => {
             {showMenu && (
               <div className="dropdown">
                 <button onClick={() => navigate("/profile")}>Profile</button>
+                <button className="admin-dropdown-button" onClick={() => navigate("/admin")}>Admin Panel</button>
                 <button onClick={handleSignOut}>Sign Out</button>
               </div>
             )}

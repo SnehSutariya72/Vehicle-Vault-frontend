@@ -1,3 +1,4 @@
+// App.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -8,6 +9,7 @@ import About from "./components/About/About";
 import CarsList from "./components/CarsList";
 import CarDetails from "./components/CarDetails";
 import Agents from "./components/Agents";
+import AdminPanel from "./components/AdminPanel"; // Import the AdminPanel component
 import "./Style.css";
 import Dashboard from "./users/Dashboard";
 import UserProfile from "./users/UserProfile";
@@ -19,6 +21,7 @@ const App = () => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadingAgents, setLoadingAgents] = useState(true);
+  const [searchError, setSearchError] = useState("");
 
   // Fetch Cars
   useEffect(() => {
@@ -56,6 +59,32 @@ const App = () => {
       });
   }, []);
 
+  // Handle search submission
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (!search.trim()) return;
+
+    // Check if any car matches the search criteria
+    const foundCar = cars.find(
+      car => 
+        (car.name && car.name.toLowerCase().includes(search.toLowerCase())) || 
+        (car.brand && car.brand.toLowerCase().includes(search.toLowerCase())) ||
+        (car.make && car.make.toLowerCase().includes(search.toLowerCase())) ||
+        (car.model && car.model.toLowerCase().includes(search.toLowerCase()))
+    );
+
+    if (foundCar) {
+      // Car found - programmatically navigate to car details page
+      const carId = foundCar._id || foundCar.carId;
+      window.location.href = `/car/${carId}`;
+    } else {
+      // No car found - set error message
+      setSearchError("No matching cars found. Please try a different search term.");
+      // Clear error after 3 seconds
+      setTimeout(() => setSearchError(""), 3000);
+    }
+  };
+
   return (
     <Router>
       <div className="app-container bg-gray-50 min-h-screen font-sans text-gray-900">
@@ -66,6 +95,7 @@ const App = () => {
           <Route path="/about" element={<About />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<UserProfile />} />
+          <Route path="/admin" element={<AdminPanel />} /> {/* Added Admin Panel Route */}
 
           {/* Cars Page */}
           <Route
@@ -113,7 +143,7 @@ const App = () => {
                     Find Your Dream Car Today
                   </h1>
 
-                  <div className="flex justify-center gap-4">
+                  <form onSubmit={handleSearchSubmit} className="flex justify-center gap-4">
                     <input
                       type="text"
                       placeholder="Search Make or Model"
@@ -121,10 +151,19 @@ const App = () => {
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                     />
-                    <button className="px-5 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 text-lg">
+                    <button 
+                      type="submit"
+                      className="px-5 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 text-lg"
+                    >
                       Search
                     </button>
-                  </div>
+                  </form>
+                  
+                  {searchError && (
+                    <div className="mt-4 p-3 bg-red-100 text-red-700 rounded-lg">
+                      {searchError}
+                    </div>
+                  )}
                 </div>
               </div>
             }

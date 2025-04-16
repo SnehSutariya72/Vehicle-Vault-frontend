@@ -106,17 +106,17 @@ const CarManagement = () => {
         setError(null);
         
         try {
-            const formData = new FormData();
-            formData.append('make', formData.make);
-            formData.append('model', formData.model);
-            formData.append('price', formData.price);
-            formData.append('color', formData.color);
-            formData.append('userId', currentUserId);
-            formData.append('kmsDriven', formData.kmsDriven);
+            const carformData = new FormData();
+            carformData.append('make', formData.make);
+            carformData.append('model', formData.model);
+            carformData.append('price', formData.price);
+            carformData.append('color', formData.color);
+            carformData.append('userId', currentUserId);
+            carformData.append('kmsDriven', formData.kmsDriven);
 
             const response = await fetch(`http://localhost:8000/api/cars/update_car/${carId}`, {
                 method: "PUT",
-                body: formData
+                body: carformData
             });
 
             if (!response.ok) {
